@@ -15,11 +15,9 @@ export default function Login({ setAuth }) {
       data.append("password", password);
       data.append("client_id", "4qAsm9ddRN3crIRcjEVXVB5AbTJbuNa7kWf0rh0n");
 
-      const res = await axios.post(
-        "http://127.0.0.1:8000/o/token/",
-        data,
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-      );
+      const res = await api.post("/o/token/", data, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
       localStorage.setItem("token", res.data.access_token);
       setAuth(true);

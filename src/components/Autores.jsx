@@ -6,38 +6,49 @@ function Autores() {
   const [autores, setAutores] = useState([]);
   const [nombre, setNombre] = useState("");
 
-  const cargarAutores = async () => {
+  useEffect(() => {
+    obtenerAutores();
+  }, []);
+
+  const obtenerAutores = async () => {
     const res = await api.get("autores/");
     setAutores(res.data);
   };
 
-  const guardarAutor = async () => {
+  const crearAutor = async () => {
     await api.post("autores/", { nombre });
     setNombre("");
-    cargarAutores();
+    obtenerAutores();
   };
 
   const eliminarAutor = async (id) => {
     await api.delete(`autores/${id}/`);
-    cargarAutores();
+    obtenerAutores();
   };
-
-  useEffect(() => {
-    cargarAutores();
-  }, []);
 
   return (
     <div>
       <h2>Autores</h2>
-      <TextField label="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} />
-      <Button onClick={guardarAutor}>Guardar</Button>
 
-      {autores.map(a => (
-        <div key={a.id}>
-          {a.nombre}
-          <Button onClick={() => eliminarAutor(a.id)}>Eliminar</Button>
-        </div>
-      ))}
+      <TextField
+        label="Nuevo Autor"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+      />
+      <Button onClick={crearAutor} variant="contained">
+        Crear
+      </Button>
+
+      <ul>
+        {autores.map((autor) => (
+          <li key={autor.id}>
+            {autor.nombre}
+            <Button onClick={() => eliminarAutor(autor.id)}>
+              Eliminar
+            </Button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
